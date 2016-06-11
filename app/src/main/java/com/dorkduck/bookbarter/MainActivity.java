@@ -1,5 +1,7 @@
 package com.dorkduck.bookbarter;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,11 +14,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
+import android.widget.TextView;;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    SharedPreferences sharedPreferences;
+    public static final String MYPREF = "myPreferences";
+    public static String username = "";
+    public static String emailID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,15 +31,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        sharedPreferences = getSharedPreferences(MYPREF, Context.MODE_PRIVATE);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -43,8 +43,19 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);
+
+        //Retrieve user details
+        username = sharedPreferences.getString("Name","Missing");
+        emailID = sharedPreferences.getString("Email","Missing");
+
+        //Initialize user details.
+        View header  = navigationView.getHeaderView(0);
+        TextView uname = (TextView)header.findViewById(R.id.name);
+
+        TextView emaila = (TextView)header.findViewById(R.id.emailadd);
+
+        uname.setText(username);
+        emaila.setText(emailID);
     }
 
     @Override
