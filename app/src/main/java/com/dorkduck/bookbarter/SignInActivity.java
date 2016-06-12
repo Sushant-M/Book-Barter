@@ -16,6 +16,8 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -34,12 +36,14 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.server.converter.StringToIntConverter;
 
+import org.json.JSONObject;
+
 import java.net.URI;
+import java.util.Arrays;
 
 public class SignInActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener {
-
 
     private static final String TAG = "Sign In Activity";
     private GoogleApiClient mGoogleApiClient;
@@ -58,17 +62,19 @@ public class SignInActivity extends AppCompatActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //check is facebook login has been done
+
+
+        //check if google login has been done
         sharedPreferences = getSharedPreferences(MYPREF, Context.MODE_PRIVATE);
-
         boolean hasLogged = sharedPreferences.getBoolean("LoggedIn",false);
-
         checkLoggedInStatus(hasLogged);
 
         //Facebook Sign in
 
         LoginButton loginButton;
         loginButton = (LoginButton)findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email");
+        loginButton.setReadPermissions(Arrays.asList("public_profile, email, user_birthday"));
 
 
         callbackManager = CallbackManager.Factory.create();
@@ -78,6 +84,17 @@ public class SignInActivity extends AppCompatActivity implements
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG,"FB sign in complete");
+
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("LoggedIn",true);
+
+                editor.commit();
+                in = new Intent(SignInActivity.this,MainActivity.class);
+                startActivity(in);
+                finish();
+
 
             }
 
@@ -131,6 +148,7 @@ public class SignInActivity extends AppCompatActivity implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        callbackManager.onActivityResult(requestCode, resultCode, data);
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);

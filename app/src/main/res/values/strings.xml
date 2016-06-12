@@ -21,4 +21,6 @@
     </string>
     <string name="title_activity_sign_in_acitivity">SignInAcitivity</string>
     <string name="title_activity_sign_in">SignInActivity</string>
+    <string name="fb_login_protocol_scheme">fb397160540454340</string>
+    <string name="title_activity_maps">Readers Nearby</string>
 </resources>
