@@ -1,12 +1,15 @@
 package com.dorkduck.bookbarter;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -24,7 +27,7 @@ import com.google.android.gms.location.LocationServices;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener,LibraryFragment.OnFragmentInteractionListener {
 
     SharedPreferences sharedPreferences;
     public static final String MYPREF = "myPreferences";
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity
                     .addApi(LocationServices.API)
                     .build();
         }
+
     }
 
     @Override
@@ -112,18 +116,23 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
         if (id == R.id.readers_nearby) {
             Intent in = new Intent(MainActivity.this,MapsActivity.class);
             startActivity(in);
         } else if (id == R.id.library) {
+           LibraryFragment libraryFragment = new LibraryFragment();
+           getSupportFragmentManager().beginTransaction().add(R.id.flContent,libraryFragment).commit();
 
         } else if (id == R.id.my_record) {
+
 
         } else if (id == R.id.logout) {
 
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -132,7 +141,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onConnected(Bundle bundle) {
-        Location mLastLocation = null;
+        /*Location mLastLocation = null;
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
@@ -140,7 +149,7 @@ public class MainActivity extends AppCompatActivity
             String Lat = String.valueOf(mLastLocation.getLatitude());
             String Lon = String.valueOf(mLastLocation.getLongitude());
             Log.d(Lat,Lon);
-        }
+        }*/
     }
 
 
@@ -163,4 +172,8 @@ public class MainActivity extends AppCompatActivity
         super.onStop();
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 }
