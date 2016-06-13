@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -28,7 +29,7 @@ import com.google.android.gms.location.LocationServices;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,LibraryFragment.OnFragmentInteractionListener,
-        DefaultFragment.OnFragmentInteractionListener {
+        DefaultFragment.OnFragmentInteractionListener,MyRecordFragment.OnFragmentInteractionListener {
 
     SharedPreferences sharedPreferences;
     public static final String MYPREF = "myPreferences";
@@ -126,10 +127,18 @@ public class MainActivity extends AppCompatActivity
             Intent in = new Intent(MainActivity.this,MapsActivity.class);
             startActivity(in);
         } else if (id == R.id.library) {
-
+            //Replace with library fragment.
+            LibraryFragment libraryFragment = new LibraryFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.flContent, libraryFragment);
+            transaction.commit();
 
         } else if (id == R.id.my_record) {
-
+            //Replace with Record fragment.
+            MyRecordFragment myRecordFragment = new MyRecordFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.flContent,myRecordFragment);
+            transaction.commit();
 
         } else if (id == R.id.logout) {
 
