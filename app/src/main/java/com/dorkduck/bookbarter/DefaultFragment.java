@@ -1,12 +1,15 @@
 package com.dorkduck.bookbarter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 /**
@@ -18,6 +21,13 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class DefaultFragment extends Fragment {
+
+    String Longi = "";
+    String Lati = "";
+    SharedPreferences sharedPreferences;
+    public static final String MYPREF = "myPreferences";
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -58,6 +68,10 @@ public class DefaultFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        sharedPreferences = this.getActivity().getSharedPreferences(MYPREF, Context.MODE_PRIVATE);
+        Lati = sharedPreferences.getString("Latitude","Latitude unknown");
+        Longi = sharedPreferences.getString("Longitude","Longitude unknown");
     }
 
     @Override
@@ -104,5 +118,17 @@ public class DefaultFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+    public void setLocation(View view){
+        TextView lati_view = (TextView)getView().findViewById(R.id.Latitude);
+        lati_view.setText(Lati);
+        TextView longi_view = (TextView)getView().findViewById(R.id.Longitude);
+        longi_view.setText(Longi);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setLocation(getView());
     }
 }

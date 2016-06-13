@@ -1,8 +1,10 @@
 package com.dorkduck.bookbarter;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.net.Uri;
@@ -23,7 +25,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;;import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 
 public class MainActivity extends AppCompatActivity
@@ -69,7 +79,7 @@ public class MainActivity extends AppCompatActivity
         uname.setText(username);
         emaila.setText(emailID);
 
-        //Location Services
+        //Location Services and location services check
 
 
         if (mGoogleApiClient == null) {
@@ -79,9 +89,54 @@ public class MainActivity extends AppCompatActivity
                     .addApi(LocationServices.API)
                     .build();
         }
+
+
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
+        locationRequest.setInterval(30 * 1000);
+        locationRequest.setFastestInterval(5 * 1000);
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest);
+
+        builder.setAlwaysShow(true);
+
+        PendingResult<LocationSettingsResult> result =
+                LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
+        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+            @Override
+            public void onResult(LocationSettingsResult result) {
+                final Status status = result.getStatus();
+                final LocationSettingsStates state = result.getLocationSettingsStates();
+                switch (status.getStatusCode()) {
+                    case LocationSettingsStatusCodes.SUCCESS:
+                        // All location settings are satisfied. The client can initialize location
+                        // requests here.
+                        break;
+                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                        // Location settings are not satisfied. But could be fixed by showing the user
+                        // a dialog.
+                        try {
+                            // Show the dialog by calling startResolutionForResult(),
+                            // and check the result in onActivityResult().
+                            status.startResolutionForResult(
+                                    MainActivity.this, 1000);
+                        } catch (IntentSender.SendIntentException e) {
+                            // Ignore the error.
+                        }
+                        break;
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                        // Location settings are not satisfied. However, we have no way to fix the
+                        // settings so we won't show the dialog.
+                        break;
+                }
+            }
+        });
+
         //Fragment Initialization
         DefaultFragment defaultFragment = new DefaultFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.flContent,defaultFragment).commit();
+
+
     }
 
     @Override
@@ -152,16 +207,24 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onConnected(Bundle bundle) {
-        /*Location mLastLocation = null;
+
+        Location mLastLocation = null;
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
-        if (mLastLocation != null) {
 
+        if (mLastLocation != null) {
             String Lat = String.valueOf(mLastLocation.getLatitude());
             String Lon = String.valueOf(mLastLocation.getLongitude());
             Log.d(Lat,Lon);
-        }*/
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("Latitude",Lat);
+            editor.putString("Longitude",Lon);
+            editor.commit();
+        }
+
+
     }
+
 
 
     @Override
@@ -187,4 +250,5 @@ public class MainActivity extends AppCompatActivity
     public void onFragmentInteraction(Uri uri) {
 
     }
+
 }
