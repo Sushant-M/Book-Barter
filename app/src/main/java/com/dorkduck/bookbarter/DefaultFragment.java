@@ -5,9 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -15,12 +12,12 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link LibraryFragment.OnFragmentInteractionListener} interface
+ * {@link DefaultFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link LibraryFragment#newInstance} factory method to
+ * Use the {@link DefaultFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LibraryFragment extends Fragment {
+public class DefaultFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -32,7 +29,7 @@ public class LibraryFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public LibraryFragment() {
+    public DefaultFragment() {
         // Required empty public constructor
     }
 
@@ -42,11 +39,11 @@ public class LibraryFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment LibraryFragment.
+     * @return A new instance of fragment DefaultFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static LibraryFragment newInstance(String param1, String param2) {
-        LibraryFragment fragment = new LibraryFragment();
+    public static DefaultFragment newInstance(String param1, String param2) {
+        DefaultFragment fragment = new DefaultFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -57,19 +54,17 @@ public class LibraryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_library, container, false);
+        return inflater.inflate(R.layout.fragment_default, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -109,24 +104,5 @@ public class LibraryFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // TODO Auto-generated method stub
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.library_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // handle item selection
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                // do s.th.
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
     }
 }

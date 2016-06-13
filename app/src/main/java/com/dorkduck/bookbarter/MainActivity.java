@@ -27,7 +27,8 @@ import com.google.android.gms.location.LocationServices;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,LibraryFragment.OnFragmentInteractionListener {
+        GoogleApiClient.OnConnectionFailedListener,LibraryFragment.OnFragmentInteractionListener,
+        DefaultFragment.OnFragmentInteractionListener {
 
     SharedPreferences sharedPreferences;
     public static final String MYPREF = "myPreferences";
@@ -77,7 +78,9 @@ public class MainActivity extends AppCompatActivity
                     .addApi(LocationServices.API)
                     .build();
         }
-
+        //Fragment Initialization
+        DefaultFragment defaultFragment = new DefaultFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.flContent,defaultFragment).commit();
     }
 
     @Override
@@ -123,8 +126,7 @@ public class MainActivity extends AppCompatActivity
             Intent in = new Intent(MainActivity.this,MapsActivity.class);
             startActivity(in);
         } else if (id == R.id.library) {
-           LibraryFragment libraryFragment = new LibraryFragment();
-           getSupportFragmentManager().beginTransaction().add(R.id.flContent,libraryFragment).commit();
+
 
         } else if (id == R.id.my_record) {
 
