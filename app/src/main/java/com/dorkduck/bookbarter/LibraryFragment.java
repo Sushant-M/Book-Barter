@@ -1,6 +1,7 @@
 package com.dorkduck.bookbarter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 
 /**
@@ -68,6 +72,32 @@ public class LibraryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        TableLayout tl = (TableLayout) getView().findViewById(R.id.main_table);
+        TableRow tr_head = new TableRow(getActivity());
+        tr_head.setBackgroundColor(Color.GRAY);
+        tr_head.setLayoutParams(new ViewGroup.LayoutParams(
+                TableLayout.LayoutParams.FILL_PARENT,
+                TableLayout.LayoutParams.WRAP_CONTENT));
+
+        TextView label_date = new TextView(getActivity());
+        label_date.setText("DATE");
+        label_date.setTextColor(Color.WHITE);
+        label_date.setPadding(5, 5, 5, 5);
+        tr_head.addView(label_date);// add the column to the table row here
+
+        TextView label_weight_kg = new TextView(getActivity());
+        label_weight_kg.setText("Wt(Kg.)"); // set the text for the header
+        label_weight_kg.setTextColor(Color.WHITE); // set the color
+        label_weight_kg.setPadding(5, 5, 5, 5); // set the padding (if required)
+        tr_head.addView(label_weight_kg); // add the column to the table row here
+
+        tl.addView(tr_head, new TableLayout.LayoutParams(
+                TableLayout.LayoutParams.FILL_PARENT,
+                TableLayout.LayoutParams.WRAP_CONTENT));
+
+
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_library, container, false);
     }
