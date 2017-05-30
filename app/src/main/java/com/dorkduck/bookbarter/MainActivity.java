@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -37,9 +39,9 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,LibraryFragment.OnFragmentInteractionListener,
-        DefaultFragment.OnFragmentInteractionListener,MyRecordFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LibraryFragment.OnFragmentInteractionListener,
+        DefaultFragment.OnFragmentInteractionListener, MyRecordFragment.OnFragmentInteractionListener {
 
     SharedPreferences sharedPreferences;
     public static final String MYPREF = "myPreferences";
@@ -67,14 +69,14 @@ public class MainActivity extends AppCompatActivity
 
 
         //Retrieve user details
-        username = sharedPreferences.getString("Name","Missing");
-        emailID = sharedPreferences.getString("Email","Missing");
+        username = sharedPreferences.getString("Name", "Missing");
+        emailID = sharedPreferences.getString("Email", "Missing");
 
         //Initialize user details.
-        View header  = navigationView.getHeaderView(0);
-        TextView uname = (TextView)header.findViewById(R.id.name);
+        View header = navigationView.getHeaderView(0);
+        TextView uname = (TextView) header.findViewById(R.id.name);
 
-        TextView emaila = (TextView)header.findViewById(R.id.emailadd);
+        TextView emaila = (TextView) header.findViewById(R.id.emailadd);
 
         uname.setText(username);
         emaila.setText(emailID);
@@ -134,7 +136,7 @@ public class MainActivity extends AppCompatActivity
 
         //Fragment Initialization
         DefaultFragment defaultFragment = new DefaultFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.flContent,defaultFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.flContent, defaultFragment).commit();
 
 
     }
@@ -179,7 +181,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.readers_nearby) {
-            Intent in = new Intent(MainActivity.this,MapsActivity.class);
+            Intent in = new Intent(MainActivity.this, MapsActivity.class);
             startActivity(in);
         } else if (id == R.id.library) {
             //Replace with library fragment.
@@ -192,7 +194,7 @@ public class MainActivity extends AppCompatActivity
             //Replace with Record fragment.
             MyRecordFragment myRecordFragment = new MyRecordFragment();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.flContent,myRecordFragment);
+            transaction.replace(R.id.flContent, myRecordFragment);
             transaction.commit();
 
         } else if (id == R.id.logout) {
@@ -209,6 +211,16 @@ public class MainActivity extends AppCompatActivity
     public void onConnected(Bundle bundle) {
 
         Location mLastLocation = null;
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
 

@@ -1,19 +1,33 @@
 package com.dorkduck.bookbarter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 
 /**
@@ -29,10 +43,14 @@ public class LibraryFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String TAG = "LibraryFragment";
+    BooksAdapter adapter;
+    FirebaseDatabase firebaseDatabase;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    ArrayList<String> local_array = new ArrayList<>();
 
     private OnFragmentInteractionListener mListener;
 
@@ -66,6 +84,7 @@ public class LibraryFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        firebaseDatabase = FirebaseDatabase.getInstance();
 
     }
 
@@ -73,9 +92,56 @@ public class LibraryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        View view =  inflater.inflate(R.layout.fragment_library, container, false);
+
+        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.books_library);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        local_array.add("hahaha");
+        local_array.add("beiga");
+
+        adapter = new BooksAdapter(local_array);
+        recyclerView.setAdapter(adapter);
+
+
+        String TITLE = "Add book";
+        final EditText editText = new EditText(getContext());
+        editText.setHint("Enter book name here");
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(TITLE);
+        builder.setView(editText);
+
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                local_array.add(editText.getText().toString());
+                adapter.notifyDataSetChanged();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        final AlertDialog dialog = builder.create();
+
+
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.add_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.show();
+            }
+        });
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_library, container, false);
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -95,6 +161,7 @@ public class LibraryFragment extends Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
+
 
     @Override
     public void onDetach() {
