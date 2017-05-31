@@ -9,6 +9,8 @@ package com.example.sushant.myapplication.backend;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
+import com.google.appengine.repackaged.com.google.protobuf.DescriptorProtos;
+import java.util.List;
 
 import javax.inject.Named;
 
@@ -30,10 +32,16 @@ public class MyEndpoint {
      * A simple endpoint method that takes a name and says Hi back
      */
     @ApiMethod(name = "sayHi")
-    public MyBean sayHi(@Named("name") String name) {
-        MyBean response = new MyBean();
-        response.setData("Hi, " + name);
+    public MyBean sayHi() {
 
+        Location location1 = new Location("18","74","Nathan");
+        Location location2 = new Location("18.464977","73.921234","Sushant");
+        MyBean response = new MyBean();
+
+        List<Location> locations = null;
+        locations.add(location1);
+        locations.add(location2);
+        response.setLocation_list(locations);
         return response;
     }
 

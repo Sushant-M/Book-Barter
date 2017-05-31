@@ -1,5 +1,7 @@
 package com.dorkduck.bookbarter;
 
+import android.*;
+import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -10,11 +12,13 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -43,11 +47,16 @@ public class MainActivity extends AppCompatActivity
         GoogleApiClient.OnConnectionFailedListener, LibraryFragment.OnFragmentInteractionListener,
         DefaultFragment.OnFragmentInteractionListener, MyRecordFragment.OnFragmentInteractionListener {
 
+    public static String TAG = "MainActivity";
+    private static final int some_var = 10;
     SharedPreferences sharedPreferences;
     public static final String MYPREF = "myPreferences";
     public static String username = "";
     public static String emailID = "";
     private GoogleApiClient mGoogleApiClient = null;
+
+    private Location mLastLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +102,19 @@ public class MainActivity extends AppCompatActivity
         }
 
 
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+            {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        some_var);
+            }
+        }
+
+
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(30 * 1000);
@@ -102,43 +124,26 @@ public class MainActivity extends AppCompatActivity
 
         builder.setAlwaysShow(true);
 
-        PendingResult<LocationSettingsResult> result =
-                LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
-        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-            @Override
-            public void onResult(LocationSettingsResult result) {
-                final Status status = result.getStatus();
-                final LocationSettingsStates state = result.getLocationSettingsStates();
-                switch (status.getStatusCode()) {
-                    case LocationSettingsStatusCodes.SUCCESS:
-                        // All location settings are satisfied. The client can initialize location
-                        // requests here.
-                        break;
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        // Location settings are not satisfied. But could be fixed by showing the user
-                        // a dialog.
-                        try {
-                            // Show the dialog by calling startResolutionForResult(),
-                            // and check the result in onActivityResult().
-                            status.startResolutionForResult(
-                                    MainActivity.this, 1000);
-                        } catch (IntentSender.SendIntentException e) {
-                            // Ignore the error.
-                        }
-                        break;
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        // Location settings are not satisfied. However, we have no way to fix the
-                        // settings so we won't show the dialog.
-                        break;
-                }
-            }
-        });
 
         //Fragment Initialization
         DefaultFragment defaultFragment = new DefaultFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.flContent, defaultFragment).commit();
 
 
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case some_var: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                }
+            }
+
+        }
     }
 
     @Override
@@ -182,6 +187,8 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.readers_nearby) {
             Intent in = new Intent(MainActivity.this, MapsActivity.class);
+           // in.putExtra("latitude",mLastLocation.getLatitude());
+            //in.putExtra("longitude",mLastLocation.getLongitude());
             startActivity(in);
         } else if (id == R.id.library) {
             //Replace with library fragment.
@@ -209,9 +216,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onConnected(Bundle bundle) {
-
-        Location mLastLocation = null;
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -219,6 +224,7 @@ public class MainActivity extends AppCompatActivity
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
+            Log.d(TAG,"no permissions");
             return;
         }
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
@@ -232,9 +238,8 @@ public class MainActivity extends AppCompatActivity
             editor.putString("Latitude",Lat);
             editor.putString("Longitude",Lon);
             editor.commit();
+
         }
-
-
     }
 
 
