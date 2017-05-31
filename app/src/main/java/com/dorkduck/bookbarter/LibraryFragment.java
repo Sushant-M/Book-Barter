@@ -25,7 +25,12 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -46,6 +51,7 @@ public class LibraryFragment extends Fragment {
     private static final String TAG = "LibraryFragment";
     BooksAdapter adapter;
     FirebaseDatabase firebaseDatabase;
+    DatabaseReference reference;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -84,7 +90,6 @@ public class LibraryFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        firebaseDatabase = FirebaseDatabase.getInstance();
 
     }
 
@@ -94,19 +99,30 @@ public class LibraryFragment extends Fragment {
 
         View view =  inflater.inflate(R.layout.fragment_library, container, false);
 
-        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.books_library);
+        final RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.books_library);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        local_array.add("hahaha");
-        local_array.add("beiga");
-
-        adapter = new BooksAdapter(local_array);
         recyclerView.setAdapter(adapter);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        reference = firebaseDatabase.getReference("books");
+        adapter = new BooksAdapter(local_array);
 
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                GenericTypeIndicator<ArrayList<String>>  type = new GenericTypeIndicator<ArrayList<String>>(){};
+                local_array = dataSnapshot.getValue(type);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         String TITLE = "Add book";
         final EditText editText = new EditText(getContext());
@@ -119,13 +135,14 @@ public class LibraryFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 local_array.add(editText.getText().toString());
+                reference.setValue(local_array);
                 adapter.notifyDataSetChanged();
             }
         });
+
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
             }
         });
         final AlertDialog dialog = builder.create();
