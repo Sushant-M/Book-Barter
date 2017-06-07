@@ -23,6 +23,7 @@ import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -56,7 +57,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        //new LocationAsync().execute(new Pair<Context, String>(this, "Manfred"));
+        new LocationAsync().execute(new Pair<Context, String>(this, "Manfred"));
 
     }
 
@@ -100,12 +101,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    class LocationAsync extends AsyncTask<Pair<Context, String>, Void, List<LocationObject>> {
+    class LocationAsync extends AsyncTask<Pair<Context, String>, Void, ArrayList<LocationObject>> {
         private MyApi myApiService = null;
         private Context context;
 
         @Override
-        protected List<LocationObject> doInBackground(Pair<Context, String>... params) {
+        protected ArrayList<LocationObject> doInBackground(Pair<Context, String>... params) {
             if(myApiService == null) {  // Only do this once
                 MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                         new AndroidJsonFactory(), null)
@@ -128,7 +129,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             String name = params[0].second;
 
             try {
-                return myApiService.getLocation().execute().getList();
+                return (ArrayList<LocationObject>) myApiService.getLocation().execute().getList();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -136,7 +137,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         @Override
-        protected void onPostExecute(List<LocationObject> result) {
+        protected void onPostExecute(ArrayList<LocationObject> result) {
             String show;
             LocationObject ourObject = result.get(0);
             Toast.makeText(context,ourObject.getName() , Toast.LENGTH_LONG).show();

@@ -11,6 +11,7 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.appengine.repackaged.org.joda.time.LocalDate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Named;
@@ -42,7 +43,7 @@ public class MyEndpoint {
 
     @ApiMethod(name = "getLocation")
     public LocationBean sendLocation(){
-        List<LocationBean.LocationObject> newList = null;
+        ArrayList<LocationBean.LocationObject> newList = new ArrayList<LocationBean.LocationObject>();
         LocationBean.LocationObject object1 = new LocationBean.LocationObject("Sushant",70.98,80);
         LocationBean.LocationObject object2 = new LocationBean.LocationObject("Kevin",80.14,82.34);
         newList.add(object1);

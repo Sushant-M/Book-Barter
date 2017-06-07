@@ -1,5 +1,6 @@
 package com.example.sushant.myapplication.backend;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -8,13 +9,13 @@ import java.util.List;
 
 public class LocationBean {
 
-    private List<LocationObject> ourList;
+    private ArrayList<LocationObject> ourList;
 
-    public List<LocationObject> getList(){
+    public ArrayList<LocationObject> getList(){
         return ourList;
     }
 
-    public void setList(List<LocationObject> theList){
+    public void setList(ArrayList<LocationObject> theList){
         ourList = theList;
     }
 
