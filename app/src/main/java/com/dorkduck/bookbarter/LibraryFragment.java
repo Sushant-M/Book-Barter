@@ -99,22 +99,25 @@ public class LibraryFragment extends Fragment {
 
         View view =  inflater.inflate(R.layout.fragment_library, container, false);
 
+
         final RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.books_library);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
+
+
         firebaseDatabase = FirebaseDatabase.getInstance();
         reference = firebaseDatabase.getReference("books");
-        adapter = new BooksAdapter(local_array);
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 GenericTypeIndicator<ArrayList<String>>  type = new GenericTypeIndicator<ArrayList<String>>(){};
                 local_array = dataSnapshot.getValue(type);
+                adapter = new BooksAdapter(local_array);
+                recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
 

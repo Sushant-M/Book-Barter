@@ -6,7 +6,8 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/books_library"/>
+        android:id="@+id/books_library"
+        android:scrollbarSize="5dp"/>
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
@@ -14,5 +15,5 @@
         android:id="@+id/add_fab"
         android:layout_gravity="bottom|right"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_cast_dark"/>
+        android:src="@drawable/addsign_rightsize"/>
 </FrameLayout>

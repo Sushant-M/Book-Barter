@@ -5,7 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/Book-Barter.iml" filepath="$PROJECT_DIR$/Book-Barter.iml" />
       <module fileurl="file://$PROJECT_DIR$/BookBarter.iml" filepath="$PROJECT_DIR$/BookBarter.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/backend/backend.iml" filepath="$PROJECT_DIR$/backend/backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend_location/backend_location.iml" filepath="$PROJECT_DIR$/backend_location/backend_location.iml" />
     </modules>
   </component>
 </project>

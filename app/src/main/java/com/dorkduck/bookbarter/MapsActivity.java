@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.util.Pair;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.sushant.myapplication.backend.myApi.MyApi;
-import com.example.sushant.myapplication.backend.myApi.model.Location;
+import com.example.sushant.myapplication.backend.myApi.model.LocationObject;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -49,62 +51,95 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        new LocationRetrieval().execute(this,null,null);
         mMap = googleMap;
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //new LocationAsync().execute(new Pair<Context, String>(this, "Manfred"));
 
     }
-    public class LocationRetrieval extends AsyncTask<Context, Void, List<Location>> {
 
+    class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
         private MyApi myApiService = null;
         private Context context;
 
         @Override
-        protected List<com.example.sushant.myapplication.backend.myApi.model.Location> doInBackground(Context... params) {
-            context = params[0];
-
-            if (myApiService == null) {
-
+        protected String doInBackground(Pair<Context, String>... params) {
+            if(myApiService == null) {  // Only do this once
                 MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
-                        new AndroidJsonFactory(), null).setRootUrl("http://10.0.2.2:8080/_ah/api/")
+                        new AndroidJsonFactory(), null)
+                        // options for running against local devappserver
+                        // - 10.0.2.2 is localhost's IP address in Android emulator
+                        // - turn off compression when running against local devappserver
+                        .setRootUrl("http://10.0.2.2:8080/_ah/api/")
                         .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
                             @Override
-                            public void initialize(AbstractGoogleClientRequest<?> request) throws IOException {
-                                request.setDisableGZipContent(true);
+                            public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
+                                abstractGoogleClientRequest.setDisableGZipContent(true);
                             }
                         });
+                // end options for devappserver
+
                 myApiService = builder.build();
+            }
 
-                context = params[0];
-                try {
-                    return myApiService.sayHi().execute().getList();
+            context = params[0].first;
+            String name = params[0].second;
 
-                } catch (IOException ie) {
-                    ie.getMessage();
-                }
+            try {
+                return myApiService.sayHi(name).execute().getData();
+            } catch (IOException e) {
+                return e.getMessage();
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    class LocationAsync extends AsyncTask<Pair<Context, String>, Void, List<LocationObject>> {
+        private MyApi myApiService = null;
+        private Context context;
+
+        @Override
+        protected List<LocationObject> doInBackground(Pair<Context, String>... params) {
+            if(myApiService == null) {  // Only do this once
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
+                        new AndroidJsonFactory(), null)
+                        // options for running against local devappserver
+                        // - 10.0.2.2 is localhost's IP address in Android emulator
+                        // - turn off compression when running against local devappserver
+                        .setRootUrl("http://10.0.2.2:8080/_ah/api/")
+                        .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
+                            @Override
+                            public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
+                                abstractGoogleClientRequest.setDisableGZipContent(true);
+                            }
+                        });
+                // end options for devappserver
+
+                myApiService = builder.build();
+            }
+
+            context = params[0].first;
+            String name = params[0].second;
+
+            try {
+                return myApiService.getLocation().execute().getList();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
             return null;
         }
 
         @Override
-        protected void onPostExecute(List<Location> locations) {
-            super.onPostExecute(locations);
-            //Log.d("FUCK",String.valueOf(locations.size()));
-            Location location1 = locations.get(0);
-            Location location2 = locations.get(1);
-            String user1 = location1.getNamePrivate();
-            String user2 = location2.getNamePrivate();
-            Double lat1 = Double.valueOf(location1.getLatitude());
-            Double lat2 = Double.valueOf(location1.getLongitude());
-
-            LatLng user1_plot = new LatLng(lat1, lat2);
-            LatLng user2_plot = new LatLng(Double.valueOf(location2.getLatitude()), Double.valueOf(location2.getLongitude()));
-            mMap.addMarker(new MarkerOptions().position(user1_plot).title(location1.getNamePrivate()));
-            mMap.addMarker(new MarkerOptions().position(user2_plot).title(location2.getNamePrivate()));
-
+        protected void onPostExecute(List<LocationObject> result) {
+            String show;
+            LocationObject ourObject = result.get(0);
+            Toast.makeText(context,ourObject.getName() , Toast.LENGTH_LONG).show();
         }
     }
 }
