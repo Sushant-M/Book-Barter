@@ -12,18 +12,19 @@
     tools:context="com.dorkduck.bookbarter.SignInActivity"
     tools:showIn="@layout/activity_sign_in">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/intro_login"
+        android:textSize="30sp"
+        android:text="@string/login_with_google"/>
+
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/login_button"
-        android:layout_width="wrap_content"
+        android:minWidth="30sp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="77dp"
-        android:layout_below="@+id/sign_in_button"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:padding="20sp"
+        android:layout_below="@+id/intro_login"/>
+
 </RelativeLayout>

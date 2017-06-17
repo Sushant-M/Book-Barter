@@ -67,14 +67,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String Lati = sharedPreferences.getString("Latitude","Latitude unknown");
         String Longi = sharedPreferences.getString("Longitude","Longitude unknown");
 
-        if(Lati.contentEquals("Latitude unkwon") != true){
-            Double plotLat = Double.valueOf(Lati);
-            Double plotLon = Double.valueOf(Longi);
-
-            LatLng ourLocation = new LatLng(plotLat,plotLon);
-            mMap.addMarker(new MarkerOptions().position(ourLocation).title("Our Location"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(ourLocation));
+        try {
+            plotSelf(Lati, Longi);
+        }catch (NumberFormatException ne){
+            ne.printStackTrace();
         }
+
+    }
+
+    void plotSelf(String Lati, String Longi){
+
+        Double plotLat = Double.valueOf(Lati);
+        Double plotLon = Double.valueOf(Longi);
+
+        LatLng ourLocation = new LatLng(plotLat,plotLon);
+        mMap.addMarker(new MarkerOptions().position(ourLocation).title("Our Location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(ourLocation));
 
     }
 

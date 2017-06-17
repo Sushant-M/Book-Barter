@@ -72,16 +72,16 @@ public class SignInActivity extends AppCompatActivity implements
 
         //Facebook Sign in
 
-        LoginButton loginButton;
+       /* LoginButton loginButton;
         loginButton = (LoginButton)findViewById(R.id.login_button);
-        loginButton.setReadPermissions(Arrays.asList("public_profile, email, user_birthday"));
+        loginButton.setReadPermissions(Arrays.asList("public_profile, email, user_birthday"));*/
 
 
-        callbackManager = CallbackManager.Factory.create();
+      //  callbackManager = CallbackManager.Factory.create();
 
 
 
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+       /* loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG,"FB sign in complete");
@@ -108,7 +108,7 @@ public class SignInActivity extends AppCompatActivity implements
 
             }
         });
-
+*/
         //Google sign in
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
