@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.otto.Bus;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,7 @@ import java.util.ArrayList;
  * Implementation of App Widget functionality.
  */
 public class BooksWidget extends AppWidgetProvider {
+
 
     String TAG = getClass().getSimpleName();
 
@@ -46,7 +48,6 @@ public class BooksWidget extends AppWidgetProvider {
             Intent intent = new Intent(context,WidgetService.class);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-
             views.setRemoteAdapter(R.id.widget_list,intent);
             Log.d(TAG,"Started the service");
             appWidgetManager.updateAppWidget(appWidgetId,views);

@@ -41,6 +41,7 @@ dependencies {
     compile 'com.google.http-client:google-http-client:1.22.0'
     compile 'com.google.android.gms:play-services-maps:9.0.0'
     compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.squareup:otto:1.3.8'
     testCompile 'junit:junit:4.12'
     compile project(path: ':backend_location', configuration: 'android-endpoints')
 }

@@ -2,6 +2,7 @@ package com.dorkduck.bookbarter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,7 +25,6 @@ import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +33,9 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Set;
+
+import static com.dorkduck.bookbarter.DefaultFragment.MYPREF;
 
 
 /**
@@ -108,8 +111,11 @@ public class LibraryFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
 
-        firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseDatabase = Utils.getDatabase();
+        firebaseDatabase.setPersistenceEnabled(true);
         reference = firebaseDatabase.getReference("books");
+        final SharedPreferences sharedPreferences = getActivity().getSharedPreferences(MYPREF,Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -119,6 +125,13 @@ public class LibraryFragment extends Fragment {
                 adapter = new BooksAdapter(local_array);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+
+                for (int i = 0; i < local_array.size(); i++) {
+                    editor.putString("StringArrayElement" +i, local_array.get(i));
+                }
+                editor.putInt("StringArrayLength", local_array.size());
+
+                editor.commit();
             }
 
             @Override
