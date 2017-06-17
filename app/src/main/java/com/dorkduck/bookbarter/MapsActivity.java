@@ -9,7 +9,6 @@ import android.support.v4.util.Pair;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.sushant.myapplication.backend.LocationBean;
 import com.example.sushant.myapplication.backend.myApi.MyApi;
 import com.example.sushant.myapplication.backend.myApi.model.LocationObject;
 import com.google.android.gms.maps.CameraUpdateFactory;
