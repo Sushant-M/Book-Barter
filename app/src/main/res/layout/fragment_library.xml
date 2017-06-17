@@ -16,5 +16,5 @@
         android:id="@+id/add_fab"
         android:layout_gravity="bottom|right"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/addsign_rightsize"/>
+        android:src="@drawable/common_plus_signin_btn_icon_dark"/>
 </FrameLayout>
