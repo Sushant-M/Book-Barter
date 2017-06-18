@@ -48,4 +48,7 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="login_with_google">Login With Google</string>
+    <string name="TITLE">Add Book</string>
+    <string name="PlaceHImage">Placeholder Image</string>
+    <string name="template">Some default image for now, not really good at designing</string>
 </resources>

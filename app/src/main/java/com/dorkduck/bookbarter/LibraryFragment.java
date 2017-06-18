@@ -126,12 +126,15 @@ public class LibraryFragment extends Fragment {
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
 
-                for (int i = 0; i < local_array.size(); i++) {
-                    editor.putString("StringArrayElement" +i, local_array.get(i));
-                }
-                editor.putInt("StringArrayLength", local_array.size());
+                if(local_array != null) {
 
-                editor.commit();
+                    for (int i = 0; i < local_array.size(); i++) {
+                        editor.putString("StringArrayElement" + i, local_array.get(i));
+                    }
+                    editor.putInt("StringArrayLength", local_array.size());
+
+                    editor.commit();
+                }
             }
 
             @Override
@@ -140,7 +143,7 @@ public class LibraryFragment extends Fragment {
             }
         });
 
-        String TITLE = "Add book";
+        String TITLE = getString(R.string.TITLE);
         final EditText editText = new EditText(getContext());
         editText.setHint("Enter book name here");
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -153,6 +156,11 @@ public class LibraryFragment extends Fragment {
                 local_array.add(editText.getText().toString());
                 reference.setValue(local_array);
                 adapter.notifyDataSetChanged();
+                int total = sharedPreferences.getInt("StringArrayLength",0);
+                total++;
+                editor.putString("StringArrayElement"+ total, String.valueOf(editText.getText()));
+                editor.putInt("StringArrayLength",total);
+                editor.commit();
             }
         });
 
