@@ -12,7 +12,7 @@ android {
         finalconfig {
             keyAlias 'finalkey'
             keyPassword 'hello123'
-            storeFile file('/home/sushant/Sushant/Android-Projects/Book-Barter/app/firstStore.jks')
+            storeFile file('firstStore.jks')
             storePassword 'nagato1635uzumaki'
         }
     }
