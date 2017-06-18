@@ -5,19 +5,19 @@
         <item
             android:id="@+id/readers_nearby"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Readers Nearby" />
+            android:title="@string/readers_nearby" />
         <item
             android:id="@+id/library"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="My Library" />
+            android:title="@string/my_library" />
         <item
             android:id="@+id/my_record"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="My Record" />
+            android:title="@string/my_record" />
         <item
             android:id="@+id/logout"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Logout" />
+            android:title="@string/logout" />
     </group>
 
 

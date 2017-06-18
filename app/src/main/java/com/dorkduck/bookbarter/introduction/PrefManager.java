@@ -1,4 +1,4 @@
-package com.dorkduck.bookbarter.Introduction;
+package com.dorkduck.bookbarter.introduction;
 
 import android.content.Context;
 import android.content.SharedPreferences;

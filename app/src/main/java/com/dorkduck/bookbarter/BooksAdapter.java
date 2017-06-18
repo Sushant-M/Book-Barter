@@ -13,18 +13,18 @@ import java.util.ArrayList;
  */
 
 public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.MyViewHolder> {
-    ArrayList<String> our_list = new ArrayList<>();
+    ArrayList<String> ourList = new ArrayList<>();
 
     public BooksAdapter(ArrayList<String> list){
-        this.our_list = list;
+        this.ourList = list;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
-        public TextView book_name;
+        public TextView bookName;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            book_name = (TextView) itemView.findViewById(R.id.book_name);
+            bookName = (TextView) itemView.findViewById(R.id.book_name);
         }
     }
 
@@ -38,12 +38,15 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        String name = our_list.get(position);
-        holder.book_name.setText(name);
+        String name = ourList.get(position);
+        holder.bookName.setText(name);
     }
 
     @Override
     public int getItemCount() {
-        return our_list.size();
+        if(ourList!=null){
+            return ourList.size();
+        }
+        return 0;
     }
 }

@@ -40,6 +40,7 @@ import org.json.JSONObject;
 
 import java.net.URI;
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 
 public class SignInActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
@@ -77,7 +78,7 @@ public class SignInActivity extends AppCompatActivity implements
         loginButton.setReadPermissions(Arrays.asList("public_profile, email, user_birthday"));*/
 
 
-      //  callbackManager = CallbackManager.Factory.create();
+        callbackManager = CallbackManager.Factory.create();
 
 
 
@@ -148,7 +149,11 @@ public class SignInActivity extends AppCompatActivity implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        try {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);

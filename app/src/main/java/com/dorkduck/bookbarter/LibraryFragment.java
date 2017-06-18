@@ -3,7 +3,6 @@ package com.dorkduck.bookbarter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,19 +11,14 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,7 +27,6 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import static com.dorkduck.bookbarter.DefaultFragment.MYPREF;
 
@@ -59,7 +52,7 @@ public class LibraryFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    ArrayList<String> local_array = new ArrayList<>();
+    ArrayList<String> localArray = new ArrayList<>();
 
     private OnFragmentInteractionListener mListener;
 
@@ -121,17 +114,17 @@ public class LibraryFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 GenericTypeIndicator<ArrayList<String>>  type = new GenericTypeIndicator<ArrayList<String>>(){};
-                local_array = dataSnapshot.getValue(type);
-                adapter = new BooksAdapter(local_array);
+                localArray = dataSnapshot.getValue(type);
+                adapter = new BooksAdapter(localArray);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
 
-                if(local_array != null) {
+                if(localArray != null) {
 
-                    for (int i = 0; i < local_array.size(); i++) {
-                        editor.putString("StringArrayElement" + i, local_array.get(i));
+                    for (int i = 0; i < localArray.size(); i++) {
+                        editor.putString("StringArrayElement" + i, localArray.get(i));
                     }
-                    editor.putInt("StringArrayLength", local_array.size());
+                    editor.putInt("StringArrayLength", localArray.size());
 
                     editor.commit();
                 }
@@ -153,8 +146,8 @@ public class LibraryFragment extends Fragment {
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                local_array.add(editText.getText().toString());
-                reference.setValue(local_array);
+                localArray.add(editText.getText().toString());
+                reference.setValue(localArray);
                 adapter.notifyDataSetChanged();
                 int total = sharedPreferences.getInt("StringArrayLength",0);
                 total++;

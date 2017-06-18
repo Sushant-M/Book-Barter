@@ -51,4 +51,8 @@
     <string name="TITLE">Add Book</string>
     <string name="PlaceHImage">Placeholder Image</string>
     <string name="template">Some default image for now, not really good at designing</string>
+    <string name="logout">Logout</string>
+    <string name="my_record">My Record</string>
+    <string name="my_library">My Library</string>
+    <string name="readers_nearby">Readers Nearby</string>
 </resources>

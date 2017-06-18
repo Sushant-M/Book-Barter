@@ -6,7 +6,7 @@ android {
         config {
             keyAlias 'bbkey'
             keyPassword 'helloworld'
-            storeFile file('/home/sushant/Key Stores/firstStore.jks')
+            storeFile file('firstStore.jks')
             storePassword 'nagato1635uzumaki'
         }
     }

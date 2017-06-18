@@ -69,7 +69,7 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"/>
-        <activity android:name=".Introduction.Intro">
+        <activity android:name=".introduction.Intro">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
