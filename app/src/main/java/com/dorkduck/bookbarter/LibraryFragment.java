@@ -138,7 +138,7 @@ public class LibraryFragment extends Fragment {
 
         String TITLE = getString(R.string.TITLE);
         final EditText editText = new EditText(getContext());
-        editText.setHint("Enter book name here");
+        editText.setHint(R.string.add_book);
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(TITLE);
         builder.setView(editText);
@@ -192,7 +192,7 @@ public class LibraryFragment extends Fragment {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + getString(R.string.warning1));
         }
     }
 

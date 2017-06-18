@@ -9,6 +9,12 @@ android {
             storeFile file('firstStore.jks')
             storePassword 'nagato1635uzumaki'
         }
+        finalconfig {
+            keyAlias 'finalkey'
+            keyPassword 'hello123'
+            storeFile file('/home/sushant/Sushant/Android-Projects/Book-Barter/app/firstStore.jks')
+            storePassword 'nagato1635uzumaki'
+        }
     }
     compileSdkVersion 25
     buildToolsVersion '25.0.0'

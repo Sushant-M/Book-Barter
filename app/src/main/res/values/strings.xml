@@ -55,4 +55,6 @@
     <string name="my_record">My Record</string>
     <string name="my_library">My Library</string>
     <string name="readers_nearby">Readers Nearby</string>
+    <string name="warning1">must implement OnFragmentInteractionListener</string>
+    <string name="add_book">Enter book name here</string>
 </resources>
